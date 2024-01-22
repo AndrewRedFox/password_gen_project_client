@@ -1,5 +1,5 @@
 abstract class Login {
-  static String _login = "";
+  static String _login = "Non";
 
   static String getLogin(){
     return _login;

@@ -1,6 +1,6 @@
 abstract class Tokens{
-  static String _accessToken = "";
-  static String _refreshToken = "";
+  static String _accessToken = "Non";
+  static String _refreshToken = "Non";
 
   static setAccessToken(String token){
     _accessToken = token;
