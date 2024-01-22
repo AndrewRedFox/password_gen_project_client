@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:password_gen_project/theme/app_size_layout.dart';
+import 'package:password_gen_project/widgets/generation_password/generation_password_widget.dart';
 import 'package:password_gen_project/widgets/list_of_password/list_of_password.dart';
 import 'widgets/auth/auth_widget.dart';
 import 'widgets/register/register_widget.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/auth':(context) => AuthWidget(),
         '/register':(context) => RegisterWidget(),
         '/listOfPassword':(context) => ListOfPassword(),
+        '/generatePassword':(context) => GenerationPasswordWidget(),
       },
       initialRoute: '/auth',
     );

@@ -5,6 +5,7 @@ import 'package:password_gen_project/theme/app_colors.dart';
 import 'dart:developer' as developer;
 
 import 'package:password_gen_project/theme/app_size_layout.dart';
+import 'package:password_gen_project/theme/app_textfield_decorator.dart';
 
 String _login = "";
 String _password = "";
@@ -110,8 +111,7 @@ class _TextFieldWidgetState extends State<_TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     const _textStyle = TextStyle(color: AppColors.fontColor, fontSize: 12);
-    const _textBorder = const InputDecoration( 
-      border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), isCollapsed: true, focusColor: AppColors.buttonSecondColor);
+    var _textBorder = AppTextField.decorator;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -165,7 +165,7 @@ class _BottomWidget extends StatefulWidget {
 }
 
 class _BottomWidgetState extends State<_BottomWidget> {
-  void register()async {
+  void register() async {
     if(await ClientRegister.request(_login, _password,_confirmPassword)){
       Navigator.of(context).pop();
     }

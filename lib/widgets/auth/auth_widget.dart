@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:password_gen_project/theme/app_button_style.dart';
 import 'package:password_gen_project/theme/app_size_layout.dart';
+import 'package:password_gen_project/theme/app_textfield_decorator.dart';
 import '../../client/client_api_auth.dart';
 import '../../theme/app_colors.dart';
 import 'dart:developer' as developer;
@@ -105,10 +106,7 @@ class _TextFieldWidgetState extends State<_TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     const _textStyle = TextStyle(color: AppColors.fontColor, fontSize: 12);
-    const _textBorder = const InputDecoration( 
-      border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), isCollapsed: true, focusColor: AppColors.buttonSecondColor,
-      focusedBorder: OutlineInputBorder(),  
-    );
+    var _textBorder = AppTextField.decorator;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

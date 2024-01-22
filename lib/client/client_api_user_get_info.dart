@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:grpc/grpc.dart';
+import 'package:password_gen_project/client/client_list.dart';
 import 'package:password_gen_project/client/client_login.dart';
 import 'package:password_gen_project/client/client_tokens.dart';
 import 'package:password_gen_project/generated/client.pbgrpc.dart';
@@ -36,6 +37,7 @@ abstract class UserGetInfo {
     Tokens.setRefreshToken(response.refreshToken);
     _a = response.replyCode.toString();
     _list = response.list;
+    ListOfData.setList(_list);
     } catch (e) {
       print('Caught error: $e');
     }

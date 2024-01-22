@@ -1,19 +1,15 @@
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:grpc/grpc.dart';
+import 'package:password_gen_project/client/client_login.dart';
+import 'package:password_gen_project/client/client_tokens.dart';
 import 'package:password_gen_project/generated/client.pbgrpc.dart';
-import 'dart:developer' as developer;
 
-abstract class ClientRegister {
-  static String _login = "";
-  static String _password = "";
-  static String _confirmPassword = "";
+abstract class UserUpdateInfo{
   static String _a = "";
-
-  static Future<bool> request (String login, String password, String confirmPassword) async {
-    _login = login;
-    _password = password;
-    _confirmPassword=confirmPassword;
+  
+  static Future<bool> request (String list) async {
     final caCert = await rootBundle.loadString('assets/grpc.crt');
 
     final channel = ClientChannel(
@@ -29,18 +25,18 @@ abstract class ClientRegister {
     final stub = GreeterClient(channel);//название сервиса, client добавляется автоматически
 
     try {
-    final response = await stub.userRegister( //имя rpc соединения/ ответ
+    final response = await stub.userUpdateInfo( //имя rpc соединения/ ответ
       //UserDataRequest()..login = _login,
-      RegisterRequest(login: _login, password: _password, passwordConfirm: _confirmPassword)
-    );
+      UpdateRequest(accessToken: Tokens.getAccessToken(), refreshToken: Tokens.getRefreshToken(), login: Login.getLogin(), list: list));
     //print('Greeter client received: ${response.replyCode}');
-    _a = response.replyCode.toString();
+    Tokens.setAccessToken(response.accessToken);
+    Tokens.setRefreshToken(response.refreshToken);
+    _a = "OK";
     } catch (e) {
       print('Caught error: $e');
     }
     await channel.shutdown();
     if(_a=="OK") {
-      developer.log("OK");
       return true;
     }
     return false;

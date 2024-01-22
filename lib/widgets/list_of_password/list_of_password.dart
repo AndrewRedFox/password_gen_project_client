@@ -8,6 +8,8 @@ import 'package:password_gen_project/theme/app_colors.dart';
 import 'package:password_gen_project/theme/app_size_layout.dart';
 import 'dart:developer' as developer;
 
+import 'package:password_gen_project/theme/app_textfield_decorator.dart';
+
 List<Pair> _list=[];
 List<Widget> _listOfPass=[];
 
@@ -48,9 +50,7 @@ class __HeaderWidgetState extends State<_HeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    const _textBorder = const InputDecoration( 
-      border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), isCollapsed: true, focusColor: AppColors.buttonSecondColor,
-    );
+    var _textBorder = AppTextField.decorator;
 
     return Container(
       height: AppSizeLayout.height * 0.1,
@@ -77,7 +77,7 @@ class _CenterWidget extends StatefulWidget {
 
 class __CenterWidgetState extends State<_CenterWidget> {
   void add(){
-    //Navigator.of(context).pushReplacementNamed('');
+    Navigator.of(context).pushNamed('/generatePassword');
     setState((){});
   }
 
@@ -88,6 +88,7 @@ class __CenterWidgetState extends State<_CenterWidget> {
   }
 
   void some() async {
+    _listOfPass.clear();
     if(await UserGetInfo.request()){
       _list = UserGetInfo.getList();
       _list.forEach((element) {
@@ -95,6 +96,7 @@ class __CenterWidgetState extends State<_CenterWidget> {
           _listOfPass.add(_ListWidget(element.first, element.second, element.third));
         });
       });
+      
     }
   }
 
