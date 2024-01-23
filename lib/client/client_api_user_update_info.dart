@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:grpc/grpc.dart';
-import 'package:password_gen_project/client/client_login.dart';
-import 'package:password_gen_project/client/client_tokens.dart';
 import 'package:password_gen_project/generated/client.pbgrpc.dart';
+import 'package:password_gen_project/helpers/secure_storage.dart';
 
 abstract class UserUpdateInfo{
   static String _a = "";
@@ -27,18 +26,21 @@ abstract class UserUpdateInfo{
     try {
     final response = await stub.userUpdateInfo( //имя rpc соединения/ ответ
       //UserDataRequest()..login = _login,
-      UpdateRequest(accessToken: Tokens.getAccessToken(), refreshToken: Tokens.getRefreshToken(), login: Login.getLogin(), list: list));
-    //print('Greeter client received: ${response.replyCode}');
-    Tokens.setAccessToken(response.accessToken);
-    Tokens.setRefreshToken(response.refreshToken);
+      UpdateRequest(accessToken: await SecureStorage.getAccessToken(), refreshToken: await SecureStorage.getRefreshToken(),
+        login: await SecureStorage.getLogin(), list: list));
+
+    SecureStorage.setAccessToken(response.accessToken);
+    SecureStorage.setRefreshToken(response.refreshToken);
+
     _a = "OK";
     } catch (e) {
       print('Caught error: $e');
     }
+
     await channel.shutdown();
-    if(_a=="OK") {
-      return true;
-    }
+
+    if(_a == "OK") return true;
+
     return false;
   }
 }

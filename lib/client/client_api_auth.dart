@@ -1,16 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grpc/grpc.dart';
-import 'package:password_gen_project/client/client_login.dart';
 import 'package:password_gen_project/generated/client.pbgrpc.dart';
+import 'package:password_gen_project/helpers/secure_storage.dart';
 import 'package:password_gen_project/helpers/status_code.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'dart:developer' as developer;
-import 'client_tokens.dart';
 
 abstract class ClientValidation {
   static String _login = "";
@@ -39,16 +37,18 @@ abstract class ClientValidation {
       //UserDataRequest()..login = _login,
       UserDataRequest(login: _login, password: _password)
     );
-    Tokens.setAccessToken(response.accessToken);
-    Tokens.setRefreshToken(response.refreshToken);
-    Login.setLogin(response.login);
-    //developer.log('Greeter client received: ${response.accessToken} ${response.refreshToken} ${response.replyCode}');
+
+    SecureStorage.setAccessToken(response.accessToken);
+    SecureStorage.setRefreshToken(response.accessToken);
+    SecureStorage.setLogin(response.login);
     _a = response.replyCode.toString();
+
   } catch (e) {
     print('Caught error: $e');
   }
   await channel.shutdown();
-  if(_a=="OK") return true;
+
+  if(_a == "OK") return true;
 
   return false;
   }

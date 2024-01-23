@@ -1,13 +1,12 @@
 import 'dart:convert';
-
+import 'dart:developer' as developer;
 import 'package:flutter/services.dart';
 import 'package:grpc/grpc.dart';
 import 'package:password_gen_project/client/client_list.dart';
-import 'package:password_gen_project/client/client_login.dart';
-import 'package:password_gen_project/client/client_tokens.dart';
 import 'package:password_gen_project/generated/client.pbgrpc.dart';
 import 'package:password_gen_project/helpers/pair.dart';
 import 'package:password_gen_project/helpers/parse_list_of_password.dart';
+import 'package:password_gen_project/helpers/secure_storage.dart';
 
 abstract class UserGetInfo {
   static String _a = "";
@@ -31,17 +30,22 @@ abstract class UserGetInfo {
     try {
     final response = await stub.userGetInfo( //имя rpc соединения/ ответ
       //UserDataRequest()..login = _login,
-      InfoRequest(accessToken: Tokens.getAccessToken(), refreshToken: Tokens.getRefreshToken(), login: Login.getLogin())
+      InfoRequest(accessToken: await SecureStorage.getAccessToken(), refreshToken: await SecureStorage.getRefreshToken(),
+        login: await SecureStorage.getLogin())
     );
-    Tokens.setAccessToken(response.accessToken);
-    Tokens.setRefreshToken(response.refreshToken);
+
+    SecureStorage.setAccessToken(response.accessToken);
+    SecureStorage.setRefreshToken(response.refreshToken);
     _a = response.replyCode.toString();
     _list = response.list;
     ListOfData.setList(_list);
+
     } catch (e) {
       print('Caught error: $e');
     }
+
     await channel.shutdown();
+
     if(_a=="Ok") return true;
   
     return false;
