@@ -16,7 +16,7 @@ bool _isSymbols = false;
 bool _isUpperCase = false;
 bool _isLowerCase = false;
 double _sliderCount = 2.0;
-final _passwordTextController = TextEditingController();
+final _passwordTextController = TextEditingController(text: "");
 
 class GenerationPasswordWidget extends StatefulWidget {
   const GenerationPasswordWidget({super.key});
@@ -53,8 +53,6 @@ class _HeaderWidget extends StatefulWidget {
 }
 
 class _HeaderWidgetState extends State<_HeaderWidget> {
-  
-
   void _changedPasswordTextField(String text){
     setState(() {
       _password = _passwordTextController.text;
@@ -259,6 +257,7 @@ class _BottomWidgetState extends State<_BottomWidget> {
     String list = ListOfData.getList();
     list = list + "." + _appName + "/" + _login + "/" + _password;
     if(await UserUpdateInfo.request(list)){
+      _password = "";
       Navigator.of(context).pushReplacementNamed("/listOfPassword");
     }
   }

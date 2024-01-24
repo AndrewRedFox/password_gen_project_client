@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:password_gen_project/client/client_api_user_get_info.dart';
 import 'package:password_gen_project/helpers/pair.dart';
 import 'package:password_gen_project/theme/app_button_style.dart';
@@ -12,6 +13,8 @@ import 'package:password_gen_project/theme/app_textfield_decorator.dart';
 
 List<Pair> _list=[];
 List<Widget> _listOfPass=[];
+List<Pair> _filterList=[];
+final _searchTextController = TextEditingController(text: "");
 
 class ListOfPassword extends StatefulWidget {
   const ListOfPassword({super.key});
@@ -45,9 +48,6 @@ class _HeaderWidget extends StatefulWidget {
 }
 
 class __HeaderWidgetState extends State<_HeaderWidget> {
-  final _searchTextController = TextEditingController();
-
-
   @override
   Widget build(BuildContext context) {
     var _textBorder = AppTextField.decorator;
@@ -84,10 +84,24 @@ class __CenterWidgetState extends State<_CenterWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) { some();});
+    _loadAnimation();
+    WidgetsBinding.instance.addPostFrameCallback((_) { 
+      _userGetInfo();
+      _searchTextController.addListener((_search));
+    });
   }
 
-  void some() async {
+  void _loadAnimation(){
+    _listOfPass.add(SizedBox(height: AppSizeLayout.height/4,));
+    _listOfPass.add(
+        SpinKitRing(
+          color: AppColors.buttonFirstColor,
+          size: 150,
+        )
+    );
+  }
+
+  void _userGetInfo() async {
     _listOfPass.clear();
     if(await UserGetInfo.request()){
       _list = UserGetInfo.getList();
@@ -96,14 +110,36 @@ class __CenterWidgetState extends State<_CenterWidget> {
           _listOfPass.add(_ListWidget(element.first, element.second, element.third));
         });
       });
-      
+      setState(() {});
     }
+  }
+
+  void _search(){
+    final _text = _searchTextController.text;
+
+    if(_text.isNotEmpty){
+      _filterList = _list.where((Pair pair){
+        return pair.first.toLowerCase().contains(_text.toLowerCase());
+      }).toList();
+    } else{
+      _filterList = _list;
+    }
+    setState(() => _searchSource());
+  }
+
+  void _searchSource(){
+    _listOfPass.clear();
+    _filterList.forEach((element) {
+        setState(() {
+          _listOfPass.add(_ListWidget(element.first, element.second, element.third));
+        });
+    });
   }
 
   @override
   Widget build(BuildContext context) { 
     return Container(
-      height: AppSizeLayout.height * 0.84,
+      height: AppSizeLayout.height * 0.86,
       color: AppColors.backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
