@@ -16,7 +16,7 @@ bool _isSymbols = false;
 bool _isUpperCase = false;
 bool _isLowerCase = false;
 double _sliderCount = 2.0;
-final _passwordTextController = TextEditingController(text: "");
+late var _passwordTextController;
 
 class GenerationPasswordWidget extends StatefulWidget {
   const GenerationPasswordWidget({super.key});
@@ -26,6 +26,13 @@ class GenerationPasswordWidget extends StatefulWidget {
 }
 
 class _GenerationPasswordWidgetState extends State<GenerationPasswordWidget> {
+
+  @override
+  void initState() {
+    _passwordTextController = TextEditingController(text: "");
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -166,8 +166,11 @@ class _BottomWidget extends StatefulWidget {
 
 class _BottomWidgetState extends State<_BottomWidget> {
   void register() async {
-    if(await ClientRegister.request(_login, _password,_confirmPassword)){
+
+    if(_password == _confirmPassword){
+      if(await ClientRegister.request(_login, _password,_confirmPassword)){
       Navigator.of(context).pop();
+      }
     }
 
     setState((){});

@@ -21,12 +21,12 @@ abstract class ClientValidation {
     final caCert = await rootBundle.loadString('assets/grpc.crt');
     
     final channel = ClientChannel(
-    '192.168.0.40',
+    '95.164.47.120',
     port: 7222,
     options: ChannelOptions(
       credentials: ChannelCredentials.secure(
         certificates: utf8.encode(caCert),
-        onBadCertificate:(certificate, host) => host == '192.168.0.40:7222',
+        onBadCertificate:(certificate, host) => host == '95.164.47.120:7222',
       ), 
     ),
   );
