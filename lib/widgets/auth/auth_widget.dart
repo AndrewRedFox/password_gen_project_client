@@ -17,10 +17,19 @@ class AuthWidget extends StatefulWidget {
 }
 
 class _AuthWidgetState extends State<AuthWidget> {
+
+  @override
+  void initState() {
+    _login = "";
+    _password = "";
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     
     final _mediaQuery = MediaQuery.of(context);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(13.0),
@@ -45,7 +54,6 @@ class _HeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: AppSizeLayout.height * 0.18,
-      //width: 353,
       color: AppColors.backgroundColor,
       alignment: Alignment.center,
       child: Text('PASSGEN',
@@ -94,6 +102,7 @@ class _TextFieldWidgetState extends State<_TextFieldWidget> {
   final _loginTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   String? errorText = null;
+  bool _isObscureText = true;
 
   void _changedLoginTextField(String text){
     _login = _loginTextController.text;
@@ -103,9 +112,21 @@ class _TextFieldWidgetState extends State<_TextFieldWidget> {
     _password = _passwordTextController.text;
   }
 
+  void _changeObscure(){
+    _isObscureText = !_isObscureText;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     const _textStyle = TextStyle(color: AppColors.fontColor, fontSize: 12);
+    var _textBorderPassword = InputDecoration( 
+      border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), isCollapsed: true, focusColor: AppColors.buttonSecondColor,
+      focusedBorder: OutlineInputBorder(),
+      suffixIcon: IconButton(
+        onPressed: _changeObscure,
+        icon: Icon(Icons.remove_red_eye_outlined, color: AppColors.buttonFirstColor)),
+    );
     var _textBorder = AppTextField.decorator;
 
     return Column(
@@ -127,12 +148,12 @@ class _TextFieldWidgetState extends State<_TextFieldWidget> {
             style: _textStyle,
             textAlign: TextAlign.start,
           ),
-        TextField(
+        TextFormField(
           controller: _passwordTextController,
-          decoration: _textBorder,
-          obscureText: true,
+          decoration: _textBorderPassword,
+          obscureText: _isObscureText,
           onChanged: _changedPasswordTextField,
-          onSubmitted: _changedPasswordTextField,
+          onFieldSubmitted: _changedPasswordTextField,
         ),
       ],
     );
@@ -148,10 +169,6 @@ class _BottomWidget extends StatefulWidget {
 
 class _BottomWidgetState extends State<_BottomWidget> {
   void getData() async {
-    /*try{ClientValidation.request(_login, _password);}
-    catch(e){
-      developer.log('Caught error: $e');
-    }*/
     if(await ClientValidation.request(_login, _password)){
       Navigator.of(context).pushReplacementNamed('/listOfPassword');
     }

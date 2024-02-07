@@ -20,7 +20,7 @@ class GenerationPassword {
     String _upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     String _lower = 'abcdefghijklmnopqrstuvwxyz';
     String _numbers = '1234567890';
-    String _symbols = '!@#\$%^&*()<>,';
+    String _symbols = '!@#\$%^&*()<>,./';
     String _seed = "";
     _password = "";
 
@@ -28,7 +28,7 @@ class GenerationPassword {
     if(_useSymbols) _seed += _symbols;
     if(_useUpperCase) _seed += _upper;
     if(_useLowerCase) _seed += _lower;
-    if(_seed=="") _seed="abcdefghijklmnopqrstuvwxyz1234567890!@#\$%^&*()<>,ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if(_seed=="") _seed="abcdefghijklmnopqrstuvwxyz1234567890!@#\$%^&*()<>,ABCDEFGHIJKLMNOPQRSTUVWXYZ./";
 
     List<String> list = _seed.split('').toList();
     Random rand = Random();

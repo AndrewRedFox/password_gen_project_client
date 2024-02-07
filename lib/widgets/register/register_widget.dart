@@ -75,44 +75,37 @@ class __CenterWidgetState extends State<_CenterWidget> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 55.0, right: 55.0, top: 19),
-            child: _TextFieldWidget(),
+          padding: EdgeInsets.only(left: AppSizeLayout.width * 0.1, right: AppSizeLayout.width * 0.15, top: AppSizeLayout.height*0.03),
+          child: _TextFieldLoginWidget()
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: AppSizeLayout.width * 0.1, right: AppSizeLayout.width * 0.15),
+            child: _TextFieldPasswordsWidget(),
           ),
         ]),
     );
   }
 }
 
-class _TextFieldWidget extends StatefulWidget {
-  const _TextFieldWidget({super.key});
+class _TextFieldLoginWidget extends StatefulWidget {
+  const _TextFieldLoginWidget({super.key});
 
   @override
-  State<_TextFieldWidget> createState() => _TextFieldWidgetState();
+  State<_TextFieldLoginWidget> createState() => __TextFieldLoginWidgetState();
 }
 
-class _TextFieldWidgetState extends State<_TextFieldWidget> {
+class __TextFieldLoginWidgetState extends State<_TextFieldLoginWidget> {
   final _loginTextController = TextEditingController();
-  final _passwordTextController = TextEditingController();
-  final _confirmPasswordTextController = TextEditingController();
-  String? errorText = null;
 
   void _changedLoginTextField(String text){
     _login = _loginTextController.text;
   }
-
-  void _changedPasswordTextField(String text){
-    _password = _passwordTextController.text;
-  }
-
-  void _changedConfirmPasswordTextField(String text){
-    _confirmPassword = _confirmPasswordTextController.text;
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     const _textStyle = TextStyle(color: AppColors.fontColor, fontSize: 12);
     var _textBorder = AppTextField.decorator;
-
+    
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,28 +121,87 @@ class _TextFieldWidgetState extends State<_TextFieldWidget> {
           onSubmitted: _changedLoginTextField,
         ),
         SizedBox(height: 17,),
+      ]
+    );
+  }
+}
+
+class _TextFieldPasswordsWidget extends StatefulWidget {
+  const _TextFieldPasswordsWidget({super.key});
+
+  @override
+  State<_TextFieldPasswordsWidget> createState() => _TextFieldPasswordsWidgetState();
+}
+
+class _TextFieldPasswordsWidgetState extends State<_TextFieldPasswordsWidget> {
+  final _passwordTextController = TextEditingController();
+  final _confirmPasswordTextController = TextEditingController();
+  String? errorText = null;
+  bool _isObscureText = true;
+  final _textStyle = TextStyle(color: AppColors.fontColor, fontSize: 12);
+  var decoratorPasswordField;
+
+  void _changedPasswordTextField(String text){
+    _password = _passwordTextController.text;
+  }
+
+  void _changedConfirmPasswordTextField(String text){
+    _confirmPassword = _confirmPasswordTextController.text;
+  }
+
+  void _changeObscure(){
+    _isObscureText = !_isObscureText;
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var decoratorPasswordField = InputDecoration( 
+      border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), isCollapsed: true, focusColor: AppColors.buttonSecondColor,
+      focusedBorder: OutlineInputBorder(),
+      suffixIcon: IconButton(
+        onPressed: _changeObscure,
+        icon: Icon(Icons.remove_red_eye_outlined, color: AppColors.buttonFirstColor)),
+    );
+    
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Text('Password',
             style: _textStyle,
             textAlign: TextAlign.start,
           ),
-        TextField(
-          controller: _passwordTextController,
-          decoration: _textBorder,
-          obscureText: true,
-          onChanged: _changedPasswordTextField,
-          onSubmitted: _changedPasswordTextField,
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: _passwordTextController,
+                decoration: decoratorPasswordField,
+                obscureText: _isObscureText,
+                onChanged: _changedPasswordTextField,
+                onFieldSubmitted: _changedPasswordTextField,
+              ),
+            )
+          ],
         ),
         SizedBox(height: 17,),
         Text('Confirm password',
             style: _textStyle,
             textAlign: TextAlign.start,
           ),
-        TextField(
-          controller: _confirmPasswordTextController,
-          decoration: _textBorder,
-          obscureText: true,
-          onChanged: _changedConfirmPasswordTextField,
-          onSubmitted: _changedConfirmPasswordTextField,
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: _confirmPasswordTextController,
+                decoration: decoratorPasswordField,
+                obscureText: _isObscureText,
+                onChanged: _changedConfirmPasswordTextField,
+                onFieldSubmitted: _changedConfirmPasswordTextField,
+              ),
+            ),
+          ],
         ),
       ],
     );

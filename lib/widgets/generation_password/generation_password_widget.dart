@@ -262,7 +262,7 @@ class _BottomWidget extends StatefulWidget {
 class _BottomWidgetState extends State<_BottomWidget> {
   void saveData() async {
     String list = ListOfData.getList();
-    list = list + "." + _appName + "/" + _login + "/" + _password;
+    list = list + "`" + _appName + "~" + _login + "~" + _password;
     if(await UserUpdateInfo.request(list)){
       _password = "";
       Navigator.of(context).pushReplacementNamed("/listOfPassword");

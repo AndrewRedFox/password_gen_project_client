@@ -6,4 +6,6 @@ abstract class AppTextField{
       border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), isCollapsed: true, focusColor: AppColors.buttonSecondColor,
       focusedBorder: OutlineInputBorder(),  
     );
+
+  
 }

@@ -39,7 +39,7 @@ abstract class ClientValidation {
     );
 
     SecureStorage.setAccessToken(response.accessToken);
-    SecureStorage.setRefreshToken(response.accessToken);
+    SecureStorage.setRefreshToken(response.refreshToken);
     SecureStorage.setLogin(response.login);
     _a = response.replyCode.toString();
 

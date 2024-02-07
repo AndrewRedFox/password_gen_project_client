@@ -168,6 +168,7 @@ class __CenterWidgetState extends State<_CenterWidget> {
     _listOfPass.clear();
     if(await UserGetInfo.request()){
       _list = UserGetInfo.getList();
+      developer.log("$_list");
       _list.forEach((element) {
         setState(() {
           _listOfPass.add(_ListWidget(element.first, element.second, element.third));
@@ -273,7 +274,7 @@ class __ListWidgetState extends State<_ListWidget> {
     }
 
     _list.forEach((element) {
-      _newList = _newList + "." + element.first + "/" + element.second + "/" + element.third;
+      _newList = _newList + "`" + element.first + "~" + element.second + "~" + element.third;
     });
     
     await UserUpdateInfo.request(_newList);
